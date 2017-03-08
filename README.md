@@ -19,6 +19,7 @@
     8. constexpr if: C++17
     9. user-defined literals: C++11
     10. fold expression: C++17
+    11. structured binding: C++17
 
 2. C++ Library Features Related to C++ TMP
     1. type_traits: C++11
