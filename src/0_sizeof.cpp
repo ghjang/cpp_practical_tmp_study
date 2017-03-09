@@ -61,3 +61,22 @@ TEST_CASE("sizeof, sizeof...", "[tmp]")
         >::value == 4
     );
 }
+
+TEST_CASE("decltype", "[tmp]")
+{
+    static_assert(
+        std::is_same<int, decltype(f())>()
+    );
+    static_assert(
+        std::is_same<S, decltype(g())>()
+    );
+
+    int i;
+    S objS;
+    static_assert(
+        std::is_same<int, decltype(i)>()
+    );
+    static_assert(
+        std::is_same<S, decltype(objS)>()
+    );
+}
