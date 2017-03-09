@@ -27,18 +27,29 @@ constexpr std::size_t iterative_factorial(std::size_t i)
 }
 
 // factorial_t metafunction
+
+// primary template
+//      ==> default pattern matching
+//      ==> 'else' branch
 template <std::size_t i>
 struct factorial_t
 {
+    //  ==> recursive 'loop'
     constexpr static auto value = factorial_t<i - 1>::value * i;
 };
 
+// full template specialization
+//      ==> base case pattern matching
+//      ==> 'if' branch
 template <>
 struct factorial_t<0>
 {
     constexpr static auto value = 1;
 };
 
+// another template specialization
+//      ==> another base case pattern matching
+//      ==> another 'if' branch, somewhat like 'else if'
 template <>
 struct factorial_t<1>
 {
