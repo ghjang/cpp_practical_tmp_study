@@ -193,9 +193,7 @@ TEST_CASE("add_pointer metafunction", "[tmp]")
 
 template <typename T>
 struct add_const_pointer
-            : type_is<
-                    add_pointer_fwd_t<T const>
-              >
+            : add_pointer_fwd<T const>
 { };
 
 template <typename T>
