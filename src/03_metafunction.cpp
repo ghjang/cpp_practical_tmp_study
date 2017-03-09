@@ -1,6 +1,7 @@
 #include "catch.hpp"
 
 #include <cstddef>
+#include <type_traits>
 
 #include "02_type_is.h"
 
@@ -211,4 +212,79 @@ TEST_CASE("add_const_pointer metafunction", "[tmp]")
 
     t = i;  // OK. they're same type.
     //t = j;  // compile error
+}
+
+
+template <typename T, typename SourceType, typename TargetType>
+struct replace_type : type_is<T>
+{ };
+
+template <typename T, typename SourceType, typename TargetType>
+using replace_type_t = typename replace_type<T, SourceType, TargetType>::type;
+
+// partial template specializations for partial pattern matching
+
+template <typename S, typename T>
+struct replace_type<S, S, T> : type_is<T>
+{ };
+
+template <typename S, typename T>
+struct replace_type<S *, S, T> : type_is<T *>
+{ };
+
+template <typename S, std::size_t N, typename T>
+struct replace_type<S * [N], S, T> : type_is<T * [N]>
+{ };
+
+template <typename R, typename... Arg, typename S, typename T>
+struct replace_type<R (*) (Arg...), S, T>
+{
+    using ret_t = replace_type_t<R, S, T>;
+    using type = ret_t (*) (replace_type_t<Arg, S, T>...);
+};
+
+TEST_CASE("replace_type metafunction", "[tmp]")
+{
+    static_assert(
+            std::is_same<
+                    int *,
+                    replace_type_t<void *, void, int>
+            >()
+    );
+    static_assert(
+            std::is_same<
+                    long * [10],
+                    replace_type_t<int const * [10], int const, long>
+            >()
+    );
+    static_assert(
+            std::is_same<
+                    long & (*) (long &),
+                    replace_type_t<
+                        char & (*) (char &),
+                        char &,
+                        long &
+                    >
+            >()
+    );
+    static_assert(
+            std::is_same<
+                    long & (*) (long &, long &),
+                    replace_type_t<
+                        char & (*) (char &, char &),
+                        char &,
+                        long &
+                    >
+            >()
+    );
+    static_assert(
+            std::is_same<
+                    long (*) (double &, long),
+                    replace_type_t<
+                        float & (*) (double &, float &),
+                        float &,
+                        long
+                    >
+            >()
+    );
 }
