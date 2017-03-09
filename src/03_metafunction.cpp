@@ -89,6 +89,7 @@ TEST_CASE("factorial metafunction", "[tmp]")
     );
 }
 
+
 template <std::size_t i>
 struct binary
 {
@@ -110,6 +111,7 @@ TEST_CASE("binary metafunction", "[tmp]")
     static_assert(binary<10000>::value == 16);
 
     // NOTE: used double parenthesis due to linker error.
+    //          catch.hpp bug??
     REQUIRE((binary<1011>::value == 11));
 
     // NOTE: this is an expected compile error.
@@ -168,7 +170,7 @@ struct add_pointer_fwd
 template <typename T>
 using add_pointer_fwd_t = typename add_pointer_fwd<T>::type;
 
-TEST_CASE("metafunction forwarding and type_is utility metafunction", "[tmp]")
+TEST_CASE("add_pointer metafunction", "[tmp]")
 {
     // add_pointer metafunction call
     using my_ptr = add_pointer<int>::type;
@@ -186,4 +188,29 @@ TEST_CASE("metafunction forwarding and type_is utility metafunction", "[tmp]")
     // add_pointer_fwd_t type alias call
     using my_another_ptr1 = add_pointer_fwd_t<double>;
     my_another_ptr1 ptrD1 = &d;
+}
+
+
+template <typename T>
+struct add_const_pointer
+            : type_is<
+                    add_pointer_fwd_t<T const>
+              >
+{ };
+
+template <typename T>
+using add_const_pointer_t = typename add_const_pointer<T>::type;
+
+TEST_CASE("add_const_pointer metafunction", "[tmp]")
+{
+    using my_top_level_const_ptr = add_const_pointer_t<int>;
+    using my_t = add_pointer_fwd_t<my_top_level_const_ptr>;
+
+    // int const * *
+    my_t t = nullptr;
+    int const * * i = nullptr;
+    int const * * * j = nullptr;
+
+    t = i;  // OK. they're same type.
+    //t = j;  // compile error
 }
