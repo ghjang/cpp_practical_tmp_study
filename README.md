@@ -34,6 +34,7 @@
     4. std::initializer_list: C++11
     5. std::tuple: C++11
     6. std::variant: C++17
+    7. std::optional: C++17
 
 ## C++ Template Metaprogramming Concept
 
