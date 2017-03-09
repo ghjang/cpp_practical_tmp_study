@@ -78,6 +78,39 @@ TEST_CASE("factorial metafunction", "[tmp]")
     );
 }
 
+template <std::size_t i>
+struct binary
+{
+    static_assert(i % 10 == 0 || i % 10 == 1, "i should have 0 or 1 digit values.");
+
+    constexpr static auto value = (binary<i / 10>::value * 2)
+                                        + (i % 10);
+};
+
+template <>
+struct binary<0>
+{
+    constexpr static auto value = 0;
+};
+
+TEST_CASE("binary metafunction", "[tmp]")
+{
+    static_assert(binary<1010>::value == 10);
+    static_assert(binary<10000>::value == 16);
+
+    // NOTE: used double parenthesis due to linker error.
+    REQUIRE((binary<1011>::value == 11));
+
+    // NOTE: this is an expected compile error.
+    //          '2' is not a binary digit number.
+    //REQUIRE((binary<1210>::value == 0));
+
+    // NOTE: C++14 has binary-literal integer.
+    auto i = 0b10000;
+    REQUIRE(i == 16);
+    REQUIRE(0b1111 == 15);
+}
+
 //==============================================================================
 // type calculation
 //==============================================================================
