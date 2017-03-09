@@ -57,6 +57,7 @@ struct factorial_t<1>
     constexpr static auto value = 1;
 };
 
+// TODO: variable template
 
 TEST_CASE("factorial metafunction", "[tmp]")
 {

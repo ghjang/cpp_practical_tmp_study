@@ -24,6 +24,10 @@ set(SOURCE_FILES
         01_using_type_alias.cpp
         03_metafunction.cpp
         04_type_traits.cpp
-        0_sizeof.cpp)
+        06_sizeof_decltype.cpp
+        07_integer_sequence.cpp
+        08_tuple.cpp
+        10_select_tuple_elem.cpp
+        12_reverse_tuple.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})

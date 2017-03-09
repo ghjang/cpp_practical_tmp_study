@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <tuple>
 
-#include "0_sizeof.h"
+#include "05_length.h"
 
 
 //==============================================================================
@@ -79,4 +79,21 @@ TEST_CASE("decltype", "[tmp]")
     static_assert(
         std::is_same<S, decltype(objS)>()
     );
+}
+
+TEST_CASE("std::declval", "[tmp]")
+{
+
+}
+
+// TODO: add basic SFINAE concept, auto return type
+
+TEST_CASE("member existence check with sizeof")
+{
+
+}
+
+TEST_CASE("member existence check with decltype")
+{
+
 }
