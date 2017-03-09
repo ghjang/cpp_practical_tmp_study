@@ -20,6 +20,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 
 set(SOURCE_FILES
         main.cpp
+        00_static_assert.cpp
+        01_using_type_alias.cpp
+        03_metafunction.cpp
+        04_type_traits.cpp
         0_sizeof.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
