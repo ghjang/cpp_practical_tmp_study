@@ -73,23 +73,28 @@
 
 1. Member Test
 2. Integer Sequence Generation
-4. make_variant_tuple
-3. Aligned Tuple
-
-## C++ Template Metaprogramming Libraries
-
-1. [Boost.MPL](http://www.boost.org/doc/libs/1_63_0/libs/mpl/doc/index.html)
-2. [Boost.Fusion](http://www.boost.org/doc/libs/1_63_0/libs/fusion/doc/html/index.html)
-3. [Boost.Hana](http://www.boost.org/doc/libs/1_63_0/libs/hana/doc/html/index.html)
-4. [Brigand](https://github.com/edouarda/brigand/wiki)
+3. make_variant_tuple
+4. tuple_cat
+5. Aligned Tuple
+6. ...
 
 ---
 
 ## References
 
++ [What Does Haskell Have to Do with C++?](https://bartoszmilewski.com/2009/10/21/what-does-haskell-have-to-do-with-c/): Bartosz Milewski's blog post
 + [Tiny Metaprogramming Library](http://ericniebler.com/2014/11/13/tiny-metaprogramming-library/): Eric Niebler's blog post
 + [Simple C++11 metaprogramming](): Peter Dimov's blog post
 + [Practical C++ Metaprogramming](http://www.oreilly.com/programming/free/practical-c-plus-plus-metaprogramming.csp): 54-page PDF file report about C++ TMP
 + [CppCon 2015: Louis Dionne “C++ Metaprogramming: A Paradigm Shift"](https://www.youtube.com/watch?v=cg1wOINjV9U)
 + [C++ Now 2016: Louis Dionne: Metaprogramming for dummies](https://www.youtube.com/watch?v=a1doqFAumCk&index=9&list=PL_AKIMJc4roU0F3w20Ac77YeOFyvFmaJD)
 + [C++ Now 2016: Louis Dionne: Metaprogramming for the brave](https://www.youtube.com/watch?v=UXwWXHrvTug&index=16&list=PL_AKIMJc4roU0F3w20Ac77YeOFyvFmaJD)
++ Books
+    - [C++ Templates: The Complete Guide](https://www.amazon.com/Templates-Complete-Guide-David-Vandevoorde/dp/0201734842/ref=sr_1_1?ie=UTF8&qid=1489142301&sr=8-1&keywords=C%2B%2B+templates)
+    - [C++ Template Metaprogramming: Concepts, Tools, and Techniques from Boost and Beyond](https://www.amazon.com/Template-Metaprogramming-Concepts-Techniques-Beyond/dp/0321227255/ref=sr_1_1?ie=UTF8&qid=1489142222&sr=8-1&keywords=C%2B%2B+template+metaprogramming)
+    - [Modern C++ Design: Generic Programming and Design Patterns Applied](https://www.amazon.com/Modern-Design-Generic-Programming-Patterns/dp/0201704315/ref=sr_1_1?ie=UTF8&qid=1489142257&sr=8-1&keywords=modern+c%2B%2B+design)
++ C++ Template Metaprogramming Libraries
+    - [Boost.MPL](http://www.boost.org/doc/libs/1_63_0/libs/mpl/doc/index.html)
+    - [Boost.Fusion](http://www.boost.org/doc/libs/1_63_0/libs/fusion/doc/html/index.html)
+    - [Boost.Hana](http://www.boost.org/doc/libs/1_63_0/libs/hana/doc/html/index.html)
+    - [Brigand](https://github.com/edouarda/brigand/wiki)
