@@ -1,9 +1,7 @@
 #include "catch.hpp"
 
-#include <tuple>
 
-
-TEST_CASE("type alias", "[tmp]")
+TEST_CASE("using type alias", "[tmp]")
 {
     // typedef
     typedef unsigned long long my_int_t;
@@ -39,6 +37,6 @@ TEST_CASE("using type alias template", "[tmp]")
     my_int<long> k = 300;
     auto data = my_data<int, double>{ 400, 10.0 };
 
-    // passing using template as template template parameter.
+    // passing using type alias template as template template parameter.
     my_template<my_data> t;
 }

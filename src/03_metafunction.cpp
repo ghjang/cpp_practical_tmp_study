@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
-#include "02_type_is.h"
+#include "02_type.h"
 
 
 //==============================================================================
@@ -57,8 +57,6 @@ struct factorial_t<1>
     constexpr static auto value = 1;
 };
 
-// TODO: variable template
-
 TEST_CASE("factorial metafunction", "[tmp]")
 {
     //==== recursive factorial
@@ -92,10 +90,33 @@ TEST_CASE("factorial metafunction", "[tmp]")
 }
 
 
+// C++14 variable template
+template <std::size_t... i>
+constexpr std::size_t factorials[sizeof...(i)] = {
+                            iterative_factorial(i)...
+};
+
+TEST_CASE("variable template", "[tmp]")
+{
+    // NOTE: factorials<3, 4, 5> is not a type here. It's a variable.
+
+    // It's 'std::size_t [3]' array
+    static_assert(std::size(factorials<3, 4, 5>) == 3); // C++17 std::size
+    
+    static_assert(factorials<3, 4, 5>[0] == 1 * 2 * 3);
+    static_assert(factorials<3, 4, 5>[1] == 1 * 2 * 3 * 4);
+    static_assert(factorials<3, 4, 5>[2] == 1 * 2 * 3 * 4 * 5);
+
+    for (auto v : factorials<3, 4, 5>) {
+        // ...
+    }
+}
+
+
 template <std::size_t i>
 struct binary
 {
-    static_assert(i % 10 == 0 || i % 10 == 1, "i should have 0 or 1 digit values.");
+    static_assert(i % 10 == 0 || i % 10 == 1, "i should have only 0 or 1 digit values.");
 
     constexpr static auto value = (binary<i / 10>::value * 2)
                                         + (i % 10);
@@ -213,6 +234,7 @@ TEST_CASE("add_const_pointer metafunction", "[tmp]")
 
     t = i;  // OK. they're same type.
     //t = j;  // compile error
+    static_assert(std::is_same<my_t, int const * *>());
 }
 
 
