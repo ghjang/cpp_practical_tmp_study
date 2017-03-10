@@ -161,15 +161,122 @@ TEST_CASE("std::conditional", "[tmp]")
 }
 
 //==============================================================================
+// decay_test_func has no body here.
+template <typename T>
+T decay_test_func(T t);
+
+int my_decay_test_func();
+
 TEST_CASE("std::decay", "[tmp]")
 {
+    int i = 100;
+    int & ri = i;
+    int const j = 200;
+    int const volatile k = 300;
 
+    static_assert(std::is_same<int, decltype(decay_test_func(i))>());
+    static_assert(std::is_same<int, decltype(decay_test_func(ri))>());
+    static_assert(std::is_same<int, decltype(decay_test_func(j))>());
+    static_assert(std::is_same<int, decltype(decay_test_func(k))>());
+
+    static_assert(std::is_same<int, std::decay_t<decltype(i)>>());
+    static_assert(std::is_same<int, std::decay_t<decltype(ri)>>());
+    static_assert(std::is_same<int, std::decay_t<decltype(j)>>());
+    static_assert(std::is_same<int, std::decay_t<decltype(k)>>());
+
+    // function-to-pointer decay
+    static_assert(
+        std::is_same<
+                int (),         // function type
+                decltype(my_decay_test_func)
+        >()
+    );
+    static_assert(
+        std::is_same<
+                int (*)(),      // function pointer type.
+                decltype(decay_test_func(my_decay_test_func))   // template type deduction
+        >()
+    );
+    static_assert(
+        std::is_same<
+                int (*)(),      // function pointer type
+                std::decay_t<decltype(my_decay_test_func)>
+        >()
+    );
+
+    // array-to-pointer decay
+    int a[10];
+    static_assert(
+        std::is_same<
+                int [10],       // array type
+                decltype(a)
+        >()
+    );
+    static_assert(
+        std::is_same<
+                int *,          // pointer (to array) type
+                decltype(decay_test_func(a))
+        >()
+    );
+    static_assert(
+        std::is_same<
+                int *,          // pointer (to array) type
+                std::decay_t<decltype(a)>
+        >()
+    );
 }
 
 //==============================================================================
+template
+<
+    typename T,
+    typename = std::enable_if_t<std::is_integral<T>::value>
+>
+constexpr auto do_calc(T t)
+{
+    return t * t;
+}
+
+template
+<
+    typename T,
+    typename = void,    // NOTE: to fix compile error
+    typename = std::enable_if_t<std::is_floating_point<T>::value>
+>
+constexpr auto do_calc(T t)
+{
+    return t;
+}
+
+
+template <typename T, typename = void>
+struct calculator;
+
+template <typename T>
+struct calculator<T, std::enable_if_t<std::is_integral<T>::value>>
+{
+    static auto do_calc(T t)
+    {
+        return t * t;
+    }
+};
+
+template <typename T>
+struct calculator<T, std::enable_if_t<std::is_floating_point<T>::value>>
+{
+    static auto do_calc(T t)
+    {
+        return t;
+    }
+};
+
 TEST_CASE("std::enable_if", "[tmp]")
 {
+    static_assert(do_calc(10) == 100);
+    static_assert(do_calc(10.0) == 10);
 
+    REQUIRE(calculator<int>::do_calc(10) == 100);
+    REQUIRE(calculator<double>::do_calc(10) == 10);
 }
 
 //==============================================================================
