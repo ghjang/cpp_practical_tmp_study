@@ -68,6 +68,7 @@
 14. reverse
 15. find
 16. unique
+17. ...
 
 ## Examples
 
