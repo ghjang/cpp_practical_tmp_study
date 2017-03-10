@@ -74,7 +74,7 @@
 
 1. Member Test
 2. Integer Sequence Generation
-3. make_variant_tuple
+3. make_variant_vector
 4. tuple_cat
 5. Aligned Tuple
 6. ...
