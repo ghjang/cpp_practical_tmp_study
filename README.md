@@ -3,9 +3,9 @@
 ## Basics Review
 
 1. C++ Language Features Related to C++ TMP
-    1. sizeof
-    2. decltype: C++11
-    3. static_assert: C++11
+    1. static_assert: C++11
+    2. sizeof
+    3. decltype: C++11
     4. template
         1. type template parameter
         2. non-type template parameter
