@@ -85,7 +85,7 @@
 
 + [What Does Haskell Have to Do with C++?](https://bartoszmilewski.com/2009/10/21/what-does-haskell-have-to-do-with-c/): Bartosz Milewski's blog post
 + [Tiny Metaprogramming Library](http://ericniebler.com/2014/11/13/tiny-metaprogramming-library/): Eric Niebler's blog post
-+ [Simple C++11 metaprogramming](): Peter Dimov's blog post
++ [Simple C++11 metaprogramming](http://pdimov.com/cpp2/simple_cxx11_metaprogramming.html): Peter Dimov's blog post
 + [Practical C++ Metaprogramming](http://www.oreilly.com/programming/free/practical-c-plus-plus-metaprogramming.csp): 54-page PDF file report about C++ TMP
 + [CppCon 2015: Louis Dionne “C++ Metaprogramming: A Paradigm Shift"](https://www.youtube.com/watch?v=cg1wOINjV9U)
 + [C++ Now 2016: Louis Dionne: Metaprogramming for dummies](https://www.youtube.com/watch?v=a1doqFAumCk&index=9&list=PL_AKIMJc4roU0F3w20Ac77YeOFyvFmaJD)
