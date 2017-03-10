@@ -52,7 +52,7 @@
 
 ## Implementing Some Primitive Metafunctions
 
-1. type
+1. identity
 2. type_is
 3. type_list, TL
 4. length
