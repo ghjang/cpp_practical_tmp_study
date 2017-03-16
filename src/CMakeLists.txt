@@ -23,8 +23,8 @@ set(SOURCE_FILES
         00_static_assert.cpp
         01_using_type_alias.cpp
         03_metafunction.cpp
-        04_type_traits.cpp
-        06_sizeof_decltype.cpp
+        05_sizeof_decltype.cpp
+        06_type_traits.cpp
         07_integer_sequence.cpp
         08_tuple.cpp
         10_select_tuple_elem.cpp
