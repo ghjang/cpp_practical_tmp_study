@@ -74,10 +74,12 @@
 
 1. Member Test
 2. Integer Sequence Generation
-3. make_variant_vector
-4. tuple_cat
-5. Aligned Tuple
-6. ...
+3. make_variant_vector function template
+4. Implementing tuple
+5. Implementing Generic Abstract Factory
+6. Aligned Tuple
+7. tuple_cat
+8. ...
 
 ---
 
