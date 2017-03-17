@@ -38,13 +38,13 @@ TEST_CASE("std::is_integral and static_assert", "[tmp]")
 
 //==============================================================================
 template <typename T, int n>
-constexpr auto my_int_const_func(T t, std::integral_constant<int, n>)
+constexpr auto int_const_test(T t, std::integral_constant<int, n>)
 {
     return t * t;
 }
 
 template <typename T>
-constexpr auto my_int_const_func(T t, std::integral_constant<int, 3>)
+constexpr auto int_const_test(T t, std::integral_constant<int, 3>)
 {
     return t * t * t;
 }
@@ -52,13 +52,13 @@ constexpr auto my_int_const_func(T t, std::integral_constant<int, 3>)
 TEST_CASE("std::integral_constant", "[tmp]")
 {
     static_assert(
-        my_int_const_func(2, std::integral_constant<int, 2>{}) == 4     // 2^2
+        int_const_test(2, std::integral_constant<int, 2>{}) == 4     // 2^2
     );
     static_assert(
-        my_int_const_func(3, std::integral_constant<int, 3>{}) == 27    // 3^3
+        int_const_test(3, std::integral_constant<int, 3>{}) == 27    // 3^3
     );
     static_assert(
-        my_int_const_func(4, std::integral_constant<int, 4>{}) == 16    // 4^2
+        int_const_test(4, std::integral_constant<int, 4>{}) == 16    // 4^2
     );
 }
 
@@ -161,11 +161,11 @@ TEST_CASE("std::conditional", "[tmp]")
 }
 
 //==============================================================================
-// decay_test_func has no body here.
+// decay_test has no body here.
 template <typename T>
-T decay_test_func(T t);
+T decay_test(T t);
 
-int my_decay_test_func();
+int my_func();
 
 TEST_CASE("std::decay", "[tmp]")
 {
@@ -174,10 +174,10 @@ TEST_CASE("std::decay", "[tmp]")
     int const j = 200;
     int const volatile k = 300;
 
-    static_assert(std::is_same<int, decltype(decay_test_func(i))>());
-    static_assert(std::is_same<int, decltype(decay_test_func(ri))>());
-    static_assert(std::is_same<int, decltype(decay_test_func(j))>());
-    static_assert(std::is_same<int, decltype(decay_test_func(k))>());
+    static_assert(std::is_same<int, decltype(decay_test(i))>());
+    static_assert(std::is_same<int, decltype(decay_test(ri))>());
+    static_assert(std::is_same<int, decltype(decay_test(j))>());
+    static_assert(std::is_same<int, decltype(decay_test(k))>());
 
     static_assert(std::is_same<int, std::decay_t<decltype(i)>>());
     static_assert(std::is_same<int, std::decay_t<decltype(ri)>>());
@@ -188,19 +188,19 @@ TEST_CASE("std::decay", "[tmp]")
     static_assert(
         std::is_same<
                 int (),         // function type
-                decltype(my_decay_test_func)
+                decltype(my_func)
         >()
     );
     static_assert(
         std::is_same<
                 int (*)(),      // function pointer type.
-                decltype(decay_test_func(my_decay_test_func))   // template type deduction
+                decltype(decay_test(my_func))   // template type deduction
         >()
     );
     static_assert(
         std::is_same<
                 int (*)(),      // function pointer type
-                std::decay_t<decltype(my_decay_test_func)>
+                std::decay_t<decltype(my_func)>
         >()
     );
 
@@ -215,7 +215,7 @@ TEST_CASE("std::decay", "[tmp]")
     static_assert(
         std::is_same<
                 int *,          // pointer (to array) type
-                decltype(decay_test_func(a))
+                decltype(decay_test(a))
         >()
     );
     static_assert(
@@ -272,6 +272,13 @@ struct calculator<T, std::enable_if_t<std::is_floating_point<T>::value>>
 
 TEST_CASE("std::enable_if", "[tmp]")
 {
+    static_assert(std::is_same<void, std::enable_if<true>::type>());
+    
+    // compile error. 'no type member'.
+    //std::enable_if<false>::type{};
+
+    static_assert(std::is_same<int, std::enable_if<true, int>::type>());
+
     static_assert(do_calc(10) == 100);
     static_assert(do_calc(10.0) == 10);
 
