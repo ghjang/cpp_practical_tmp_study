@@ -26,8 +26,6 @@ set(SOURCE_FILES
         05_sizeof_decltype.cpp
         06_type_traits.cpp
         07_integer_sequence.cpp
-        08_tuple.cpp
-        10_select_tuple_elem.cpp
-        12_reverse_tuple.cpp)
+        08_tuple.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
