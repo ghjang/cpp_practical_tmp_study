@@ -45,7 +45,8 @@ TEST_CASE("std::tuple element apply", "[tmp]")
     static_assert(
         std::is_same<
                 std::tuple<int, char const *, double>,
-                decltype(t)>()
+                decltype(t)
+        >()
     );
 
     auto result = apply(my_func{}, t);
