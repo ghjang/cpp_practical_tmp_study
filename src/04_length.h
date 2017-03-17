@@ -13,7 +13,7 @@ template
 >
 struct length<TypeListContainer<T...>>
 {
-    // NOTE: member variable value's type has const qualifier here.
+    // NOTE: member variable value's type has const qualifier here implicitly.
     constexpr static auto value = sizeof...(T);
 };
 
