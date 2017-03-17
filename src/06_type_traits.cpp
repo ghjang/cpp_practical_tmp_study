@@ -287,7 +287,7 @@ TEST_CASE("std::enable_if", "[tmp]")
 }
 
 //==============================================================================
-struct callable_obj
+struct callable
 {
     auto operator () (int i, int j) const
     {
@@ -305,6 +305,6 @@ TEST_CASE("std::result_of, std::invoke_result", "[tmp]")
     // NOTE: std::result_of is deprecated in C++17.
     //          Use std::invoke_result instead in C++17.
 
-    static_assert(std::is_same<double, std::result_of_t<callable_obj(int, int)>>());
-    static_assert(std::is_same<int, std::result_of_t<callable_obj(double, double)>>());
+    static_assert(std::is_same<double, std::result_of_t<callable(int, int)>>());
+    static_assert(std::is_same<int, std::result_of_t<callable(double, double)>>());
 }
