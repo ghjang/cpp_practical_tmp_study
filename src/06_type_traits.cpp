@@ -77,16 +77,16 @@ constexpr auto my_bool_tag_dispatch_func_impl(T t, std::false_type)
 template <typename T>
 constexpr auto my_bool_tag_dispatch_func(T t)
 {
-    return my_bool_tag_dispatch_func_impl(t, std::is_same<T, int>());
-
-    // if C++17 'if constexpr' is available, following is possible:
-    /*
+    #if  __clang_major__ < 4
+        return my_bool_tag_dispatch_func_impl(t, std::is_same<T, int>());
+    #else
+        // if C++17 'if constexpr' is available, following is possible:
         if constexpr (std::is_same<T, int>()) {
             return t;
         } else {
             return t * 2;
         }
-    */
+    #endif
 }
 
 TEST_CASE("std::true_type, std::false_type", "[tmp]")
