@@ -4,38 +4,42 @@
 #include <tuple>
 
 
-struct my_func
+namespace
 {
-    int val_ = 0;
+    struct my_func
+    {
+        int val_ = 0;
 
-    void operator () (int i)
-    { val_ += i; }
+        void operator () (int i)
+        { val_ += i; }
 
-    void operator () (double d)
-    { val_ += 10; }
+        void operator () (double d)
+        { val_ += 10; }
 
-    template <typename T>
-    void operator () (T)
-    { }
-};
+        template <typename T>
+        void operator () (T)
+        { }
+    };
 
 
-template <typename F, typename... T, std::size_t... i>
-auto apply_impl(F && f, std::tuple<T...> const& t, std::index_sequence<i...>)
-{
-    (void) std::initializer_list<int> { (f(std::get<i>(t)), 0)... };
-    return f;
-}
+    template <typename F, typename... T, std::size_t... i>
+    auto my_apply_impl(F && f, std::tuple<T...> const& t, std::index_sequence<i...>)
+    {
+        (void) std::initializer_list<int> { (f(std::get<i>(t)), 0)... };
+        return f;
+    }
 
-template <typename F, typename... T>
-auto apply(F && f, std::tuple<T...> const& t)
-{
-    return apply_impl(
-                std::forward<F>(f),
-                t,
-                std::index_sequence_for<T...>{}
-           );
-}
+    template <typename F, typename... T>
+    auto my_apply(F && f, std::tuple<T...> const& t)
+    {
+        return my_apply_impl(
+                    std::forward<F>(f),
+                    t,
+                    std::index_sequence_for<T...>{}
+            );
+    }
+}   // un-named namespace
+
 
 // cf.> std::apply in C++17
 TEST_CASE("std::tuple element apply", "[tmp]")
@@ -49,7 +53,7 @@ TEST_CASE("std::tuple element apply", "[tmp]")
         >()
     );
 
-    auto result = apply(my_func{}, t);
+    auto result = my_apply(my_func{}, t);
     REQUIRE(result.val_ == 20);
 }
 
@@ -85,9 +89,10 @@ TEST_CASE("reversing std::tuple elements", "[tmp]")
 {
     using tuple_t = std::tuple<int, std::string, double>;
     using reversed_t = std::tuple<double, std::string, int>;
-    static_assert(std::is_same<
-                        reversed_t,
-                        reverse_tuple<tuple_t>::type
-                  >()
+    static_assert(
+        std::is_same<
+                reversed_t,
+                reverse_tuple<tuple_t>::type
+        >()
     );
 }
