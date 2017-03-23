@@ -314,6 +314,7 @@ TEST_CASE("std::result_of, std::invoke_result", "[tmp]")
 
 #if __clang_major__ >= 4
 
+// C++17 std::is_invocable
 TEST_CASE("std::is_invocable, std::is_invocable_r", "[tmp]")
 {
     // NOTE: There is no std::is_invocable_v in LLVM 4.0.0.
@@ -362,6 +363,7 @@ TEST_CASE("std::is_invocable, std::is_invocable_r", "[tmp]")
     static_assert(!std::is_callable_v<callable(double, double), T>);
 }
 
+// C++17 std::invoke_result
 TEST_CASE("std::invoke_result", "[tmp]")
 {
     // NOTE: There is no std::invoke_result in LLVM 4.0.0.
@@ -378,6 +380,7 @@ TEST_CASE("std::invoke_result", "[tmp]")
 static auto my_local_func(int i)
 { return i * i * i; }
 
+// C++17 std::invoke
 TEST_CASE("std::invoke", "[tmp]")
 {
     REQUIRE(std::invoke(callable{}, 10, 10) == 10.0);
