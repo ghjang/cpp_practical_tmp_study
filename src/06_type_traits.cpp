@@ -1,7 +1,9 @@
 #include "catch.hpp"
 
 #include <type_traits>
+#include <functional>
 #include <string>
+
 
 //==============================================================================
 TEST_CASE("std::is_same", "[tmp]")
@@ -291,12 +293,12 @@ struct callable
 {
     auto operator () (int i, int j) const
     {
-        return 1.0;     // double
+        return 10.0;     // double
     }
 
     auto operator () (double i, double j) const
     {
-        return 1;       // int
+        return 20;       // int
     }
 };
 
@@ -308,3 +310,87 @@ TEST_CASE("std::result_of, std::invoke_result", "[tmp]")
     static_assert(std::is_same<double, std::result_of_t<callable(int, int)>>());
     static_assert(std::is_same<int, std::result_of_t<callable(double, double)>>());
 }
+
+
+#if __clang_major__ >= 4
+
+TEST_CASE("std::is_invocable, std::is_invocable_r", "[tmp]")
+{
+    // NOTE: There is no std::is_invocable_v in LLVM 4.0.0.
+    /*
+    static_assert(std::is_invocable_v<callable, int, int>);
+    static_assert(std::is_invocable_v<callable, double, double>);
+    */
+
+    // NOTE: std::is_callable is not found on http://cppreference.com at the moment.
+    //          What's wrong??
+    
+    static_assert(std::is_callable_v<callable(int, int)>);
+    static_assert(std::is_callable_v<callable(double, double)>);
+
+    struct S
+    {
+        S(int i);
+    };
+
+    struct T
+    {
+        operator int ();
+    };
+
+    int i = 100;
+    double d = i;
+    int j = d;  // NOTE: This might cause value losses, but it's not a compile error.
+    static_assert(std::is_convertible_v<int, double>);
+    static_assert(std::is_convertible_v<double, int>);
+
+    static_assert(std::is_convertible_v<int, S>);
+    static_assert(!std::is_convertible_v<int, T>);
+    static_assert(!std::is_convertible_v<S, int>);
+    static_assert(std::is_convertible_v<T, int>);
+    static_assert(!std::is_convertible_v<S, T>);
+    static_assert(!std::is_convertible_v<T, S>);
+
+    static_assert(std::is_callable_v<callable(int, int), int>);
+    static_assert(std::is_callable_v<callable(int, int), double>);
+    static_assert(std::is_callable_v<callable(double, double), int>);
+    static_assert(std::is_callable_v<callable(double, double), double>);
+
+    static_assert(std::is_callable_v<callable(int, int), S>);
+    static_assert(std::is_callable_v<callable(double, double), S>);
+    static_assert(!std::is_callable_v<callable(int, int), T>);
+    static_assert(!std::is_callable_v<callable(double, double), T>);
+}
+
+TEST_CASE("std::invoke_result", "[tmp]")
+{
+    // NOTE: There is no std::invoke_result in LLVM 4.0.0.
+    /*
+    static_assert(
+        std::is_same_v<
+                double,
+                std::invoke_result_t<callable, int, int>
+        >
+    );
+    */
+}
+
+static auto my_local_func(int i)
+{ return i * i * i; }
+
+TEST_CASE("std::invoke", "[tmp]")
+{
+    REQUIRE(std::invoke(callable{}, 10, 10) == 10.0);
+    REQUIRE(std::invoke(callable{}, 10.0, 10.0) == 20);
+
+    REQUIRE(
+        std::invoke(
+                [](auto a){ return a * a; },
+                10
+        ) == 100
+    );
+
+    REQUIRE(std::invoke(my_local_func, 10) == 1000);
+}
+
+#endif // __clang_major__
