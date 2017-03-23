@@ -27,7 +27,7 @@ set(SOURCE_FILES
         03_metafunction.cpp
         05_sizeof_decltype.cpp
         06_type_traits.cpp
-        07_integer_sequence.cpp
-        08_tuple.cpp)
+        09_integer_sequence.cpp
+        10_tuple.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
