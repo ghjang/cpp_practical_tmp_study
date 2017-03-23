@@ -107,3 +107,116 @@ TEST_CASE("factorial table with arbitrary index sequence", "[tmp]")
     static_assert(factorials<index_seq_t>[3] == 1 * 2 * 3 * 4 * 5 * 6);         // 6!
     static_assert(factorials<index_seq_t>[4] == 1 * 2 * 3 * 4 * 5 * 6 * 7 * 8); // 8!
 }
+
+
+//==============================================================================
+// more about constexpr array
+
+// An array can be used in a constexpr function.
+constexpr static int my_constexpr_func_with_array()
+{
+    int arr[5] = { 1, 2, 3, 4, 5 };
+    for (int i = 0; i < std::size(arr); ++i) {
+        ++arr[i];   // You can modify array values.
+    }
+    int sum = 0;
+    for (int i = 0; i < std::size(arr); ++i) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+TEST_CASE("array in a constexpr function", "[tmp]")
+{
+    static_assert(my_constexpr_func_with_array() == 20);
+}
+
+// But, you can't return an array itself in C++.
+// my_constexpr_func_returing_array results in a compile error.
+/*
+constexpr static int [5] my_constexpr_func_returing_array()
+{
+    int arr[5] = { 1, 2, 3, 4, 5 };
+    return arr;
+}
+*/
+
+// This is also a compile error.
+/*
+constexpr static decltype(auto) my_constexpr_func_returing_array_1()
+{
+    int arr[5] = { 1, 2, 3, 4, 5 };
+    return arr;
+}
+*/
+
+// This is compiled OK due to the array-to-pointer decay.
+// But, returning a local array pointer is a common programming error.
+/*
+constexpr static auto my_constexpr_func_returing_array_2()
+{
+    int arr[5] = { 1, 2, 3, 4, 5 };
+    return arr;
+}
+*/
+
+// 'static variable not permitted in a constexpr function'
+/*
+constexpr static auto my_constexpr_func_returing_array_3()
+{
+    static int arr[5] = { 1, 2, 3, 4, 5 };
+    return arr;
+}
+*/
+
+// Finally, this is OK. You can return a wrapped array!!
+constexpr static auto my_constexpr_func_returning_array_4()
+{
+    const_expr_array<std::size_t, 5> arr = { 1, 2, 3, 4, 5, };
+    return arr;
+}
+
+constexpr static auto my_array_sum()
+{
+    auto arr = my_constexpr_func_returning_array_4();
+    for (int i = 0; i < arr.size(); ++i) {
+        ++arr[i];
+    }
+    int sum = 0;
+    for (int i = 0; i < arr.size(); ++i) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+TEST_CASE("constexpr function returning a wrapped array", "[tmp]")
+{
+    static_assert(my_array_sum() == 20);
+}
+
+#if __clang_major__ >= 4    // if C++17 std::array is available,
+constexpr static auto my_constexpr_func_returning_array_5()
+{
+    std::array<std::size_t, 5> arr = { 1, 2, 3, 4, 5 };
+    return arr;
+}
+
+constexpr static auto my_array_sum_1()
+{
+    auto arr = my_constexpr_func_returning_array_5();
+    for (int i = 0; i < arr.size(); ++i) {
+        ++arr[i];   // NOTE: std::array allows this data writing in C++17,
+                    //          but not in C++14.
+    }
+    int sum = 0;
+    for (auto val : arr) {
+        sum += val;
+    }
+    return sum;
+}
+
+TEST_CASE("constexpr function returning std::array", "[tmp]")
+{
+    static_assert(my_array_sum_1() == 20);
+}
+#endif
