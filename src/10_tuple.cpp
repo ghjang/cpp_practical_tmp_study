@@ -1,8 +1,67 @@
 #include "catch.hpp"
 
 #include <type_traits>
+#include <string>
 #include <tuple>
 #include <array>
+
+
+//==============================================================================
+// std::tuple
+
+TEST_CASE("tuple basics", "[tmp]")
+{
+    // creating std::tuple objects
+    auto t = std::tuple<int, std::string, double>{ 10, "abc", 20.0 };
+    auto t1 = std::make_tuple(10, "abc", 20.0);
+
+    // getting tuple's size
+    static_assert(std::tuple_size<decltype(t)>() == 3);
+    static_assert(std::tuple_size<decltype(t1)>() == 3);
+
+    // getting tuple's element type
+    static_assert(std::is_same<int, std::tuple_element_t<0, decltype(t)>>());
+    static_assert(std::is_same<std::string, std::tuple_element_t<1, decltype(t)>>());
+    static_assert(std::is_same<double, std::tuple_element_t<2, decltype(t)>>());
+
+    static_assert(std::is_same<int, std::tuple_element_t<0, decltype(t1)>>());
+    static_assert(std::is_same<char const *, std::tuple_element_t<1, decltype(t1)>>());
+    static_assert(std::is_same<double, std::tuple_element_t<2, decltype(t1)>>());
+
+    // getting tuple's value
+    REQUIRE(std::get<0>(t) == 10);
+    REQUIRE(std::get<1>(t) == "abc");
+    REQUIRE(std::get<2>(t) == 20.0);
+
+    REQUIRE(std::get<0>(t1) == 10);
+    REQUIRE(std::strcmp(std::get<1>(t1), "abc") == 0);
+    REQUIRE(std::get<2>(t1) == 20.0);
+
+    REQUIRE(std::get<1>(t1) == "abc");  // This also passes on clang... huh??
+}
+
+TEST_CASE("tuple-like types in C++", "[tmp]")
+{
+    // std::tuple. refer to the above test case.
+
+    // std::pair
+    auto p = std::make_pair(10, 20.0);
+    static_assert(std::tuple_size<decltype(p)>() == 2);
+    static_assert(std::is_same<int, std::tuple_element_t<0, decltype(p)>>());
+    static_assert(std::is_same<double, std::tuple_element_t<1, decltype(p)>>());
+    REQUIRE(std::get<0>(p) == 10);
+    REQUIRE(std::get<1>(p) == 20.0);
+
+    // std::array
+    std::array<std::size_t, 5> arr = { 1, 2, 3, 4, 5 };
+    static_assert(std::tuple_size<decltype(arr)>() == 5);
+    static_assert(std::is_same<std::size_t, std::tuple_element_t<0, decltype(arr)>>());
+    static_assert(std::is_same<std::size_t, std::tuple_element_t<4, decltype(arr)>>());
+    REQUIRE(std::get<0>(arr) == 1);
+    REQUIRE(std::get<4>(arr) == 5);
+
+    // any types supports std::tuple_size, std::get, ...
+}
 
 
 //==============================================================================
