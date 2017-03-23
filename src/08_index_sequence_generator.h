@@ -2,6 +2,9 @@
 #define CPP_TMP_STUDY_INDEX_SEQUENCE_GENERATOR_H
 
 
+#include <type_traits>
+#include <array>
+
 #include "07_const_expr_array.h"
 
 
@@ -11,9 +14,16 @@ struct identity_next;
 template <std::size_t n, typename F = identity_next>
 struct index_sequence_generator
 {
+    using const_expr_array_t
+            = std::conditional_t<
+                    __clang_major__ >= 4,   // if C++17 std::array is available,
+                    std::array<std::size_t, n>,
+                    const_expr_array<std::size_t, n>
+              >;
+
     constexpr static auto make()
     {
-        const_expr_array<std::size_t, n> indices{};
+        const_expr_array_t indices{};
         for (std::size_t i = 0; i < n; ++i) {
             // NOTE: C++14 std::array doesn't support
             //          this assignable constexpr [] operator.
