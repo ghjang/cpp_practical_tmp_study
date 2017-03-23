@@ -37,7 +37,7 @@ TEST_CASE("tuple basics", "[tmp]")
     REQUIRE(std::strcmp(std::get<1>(t1), "abc") == 0);
     REQUIRE(std::get<2>(t1) == 20.0);
 
-    REQUIRE(std::get<1>(t1) == "abc");  // This also passes on clang... huh??
+    REQUIRE(std::get<1>(t1) == "abc");  // This passes also on clang... huh??
 }
 
 TEST_CASE("tuple-like types in C++", "[tmp]")
@@ -63,6 +63,60 @@ TEST_CASE("tuple-like types in C++", "[tmp]")
     // any types supports std::tuple_size, std::get, ...
 }
 
+
+#include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/include/size.hpp>
+#include <boost/fusion/sequence/intrinsic/at_c.hpp>
+#include <boost/fusion/include/at_c.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+
+namespace boost_fusion_test
+{
+    struct employee
+    {
+        std::string name_;
+        int age_;
+        std::string address_;
+    };
+}   // namespace boost_fusion_test
+
+BOOST_FUSION_ADAPT_STRUCT(
+    boost_fusion_test::employee,
+    name_,
+    age_,
+    address_
+)
+
+TEST_CASE("Boost.Fusion struct adaptation", "[tmp]")
+{
+    namespace fusion = boost::fusion;
+
+    boost_fusion_test::employee emp;
+
+    REQUIRE(fusion::result_of::size<decltype(emp)>::value == 3);
+
+    fusion::at_c<0>(emp) = "name";
+    fusion::at_c<1>(emp) = 10;
+    fusion::at_c<2>(emp) = "South Korea";
+
+    REQUIRE(emp.name_ == "name");
+    REQUIRE(emp.age_ == 10);
+    REQUIRE(emp.address_ == "South Korea");
+}
+
+#if __clang_major__ >= 4    // if C++17 Structured Bindings is supported,
+
+// refer to:
+//      http://boost-experimental.github.io/di/cppnow-2016/#/
+//      https://wandbox.org/permlink/b3ecHk9j2u5ueDo4
+
+TEST_CASE("Structured Bindings", "[tmp]")
+{
+
+}
+
+#endif
 
 //==============================================================================
 // Applying function on std::tuple
