@@ -28,6 +28,7 @@ set(SOURCE_FILES
         05_sizeof_decltype.cpp
         06_type_traits.cpp
         09_integer_sequence.cpp
-        10_tuple.cpp)
+        10_tuple.cpp
+        11_make_pair_array.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
