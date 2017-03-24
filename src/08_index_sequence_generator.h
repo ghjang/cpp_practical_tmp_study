@@ -74,4 +74,13 @@ struct next_odd_number
 };
 
 
+template <std::size_t n>
+using make_even_index_sequence_t
+        = typename index_sequence_generator<n, next_even_number>::type;
+
+template <std::size_t n>
+using make_odd_index_sequence_t
+        = typename index_sequence_generator<n, next_odd_number>::type;
+
+
 #endif  // CPP_TMP_STUDY_INDEX_SEQUENCE_GENERATOR_H
