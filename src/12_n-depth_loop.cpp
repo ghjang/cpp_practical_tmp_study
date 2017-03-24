@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <array>
 #include <tuple>
+#include <algorithm>
 #include <iostream>
 
 
@@ -14,20 +15,21 @@ struct loop_index_generator
     template <typename F>
     void operator () (F && f)
     {
-        array_t curLoopIndexVal = { 0, };
+        array_t curLoopIndexVal;
+        std::fill(curLoopIndexVal.begin(), curLoopIndexVal.end(), -1);
         
         int i = 0;  // current loop depth
         while (i >= 0) {
-            if (curLoopIndexVal[i] >= loopUpperLimitVal_[i]) {
-                curLoopIndexVal[i] = 0;
+            if (curLoopIndexVal[i] >= loopUpperLimitVal_[i] - 1) {
+                curLoopIndexVal[i] = -1;
                 --i;
                 continue;
             }
             ++curLoopIndexVal[i];
-            ++i;
-            if (i >= LoopDepth) {
-                --i;
+            if (i + 1 >= LoopDepth) {
                 std::apply(f, curLoopIndexVal);     // C++17 std::apply
+            } else {
+                ++i;
             }
         }
     }
@@ -42,6 +44,7 @@ auto loop(T... i)
     using common_t = std::common_type_t<T...>;
     
     static_assert(std::is_integral<common_t>());
+    static_assert(std::is_signed<common_t>());
 
     return loop_index_generator<
                     common_t,
