@@ -111,9 +111,63 @@ TEST_CASE("Boost.Fusion struct adaptation", "[tmp]")
 //      http://boost-experimental.github.io/di/cppnow-2016/#/
 //      https://wandbox.org/permlink/b3ecHk9j2u5ueDo4
 
-TEST_CASE("Structured Bindings", "[tmp]")
-{
+template <class T, class... TArgs>
+decltype(void(T{std::declval<TArgs>()...}), std::true_type{})
+test_is_braces_constructible(int);
 
+template <class, class...>
+std::false_type
+test_is_braces_constructible(...);
+
+template <class T, class... TArgs>
+using is_braces_constructible = decltype(test_is_braces_constructible<T, TArgs...>(0));
+
+
+struct any_type {
+  template<class T>
+  constexpr operator T(); // non explicit
+};
+
+
+template<class T>
+auto to_tuple(T&& object) noexcept {
+    using type = std::decay_t<T>;
+    if constexpr(is_braces_constructible<type, any_type, any_type, any_type, any_type>{}) {
+      auto && [p1, p2, p3, p4] = object;
+      return std::make_tuple(p1, p2, p3, p4);
+    } else if constexpr(is_braces_constructible<type, any_type, any_type, any_type>{}) {
+      auto && [p1, p2, p3] = object;
+      return std::make_tuple(p1, p2, p3);
+    } else if constexpr(is_braces_constructible<type, any_type, any_type>{}) {
+      auto && [p1, p2] = object;
+      return std::make_tuple(p1, p2);
+    } else if constexpr(is_braces_constructible<type, any_type>{}) {
+      auto && [p1] = object;
+      return std::make_tuple(p1);
+    } else {
+        return std::make_tuple();
+    }
+}
+
+TEST_CASE("simple reflection with Structured Bindings", "[tmp]")
+{
+    struct S
+    {
+        int a_;
+        std::string b_;
+    };
+
+    auto t = to_tuple(S{ 10, "abc" });
+
+    static_assert(
+        std::is_same<
+                decltype(t),
+                std::tuple<int, std::string>
+        >()
+    );
+
+    REQUIRE(std::get<0>(t) == 10);
+    REQUIRE(std::get<1>(t) == "abc");
 }
 
 #endif
