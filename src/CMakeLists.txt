@@ -29,6 +29,7 @@ set(SOURCE_FILES
         06_type_traits.cpp
         09_integer_sequence.cpp
         10_tuple.cpp
-        11_make_pair_array.cpp)
+        11_make_pair_array.cpp
+        12_n-depth_loop.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
