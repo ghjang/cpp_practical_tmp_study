@@ -5,6 +5,9 @@
 #include <iterator>
 #include <array>
 
+#include "02_type.h"
+
+
 //==============================================================================
 // C++14 std::integer_sequence
 
@@ -220,3 +223,44 @@ TEST_CASE("constexpr function returning std::array", "[tmp]")
     static_assert(my_array_sum_1() == 20);
 }
 #endif
+
+//==============================================================================
+// generating integer sequence in a old way.
+
+template <typename T, T... i>
+struct my_integer_sequence
+{ };
+
+
+template <typename T, T init, T n, typename Seq = my_integer_sequence<T>>
+struct my_integer_sequence_impl;
+
+template <typename T, T n, T... i>
+struct my_integer_sequence_impl<T, n, n, my_integer_sequence<T, i...>>
+        : type_is<my_integer_sequence<T, i...>>
+{ };
+
+template <typename T, T init, T n, T... i>
+struct my_integer_sequence_impl<T, init, n, my_integer_sequence<T, i...>>
+        : my_integer_sequence_impl<
+                T,
+                init + 1,
+                n,
+                my_integer_sequence<T, i..., init>
+          >
+{ };
+
+
+template <typename T, T n>
+using make_my_integer_sequence = typename my_integer_sequence_impl<T, 0, n>::type;
+
+
+TEST_CASE("make_my_integer_sequence", "[tmp]")
+{
+    static_assert(
+        std::is_same<
+            my_integer_sequence<int, 0, 1, 2, 3, 4>,
+            make_my_integer_sequence<int, 5>
+        >()
+    );
+}
