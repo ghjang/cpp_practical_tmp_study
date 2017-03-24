@@ -71,11 +71,13 @@ TEST_CASE("n-depth loop", "[tmp]")
     //          for (int j = 0; j < 3; ++j)
     //              for (int k = 0; k < 3; ++k)
     //                  f(i, j, k);
+    /*
     loop(3, 3, 3)(
         [](auto i, auto j, auto k) {
             std::cout << '(' << i << ", " << j << ", " << k << ")\n";
         }
     );
+    */
 
     /*
     loop(2, 3, 4, 5)(
