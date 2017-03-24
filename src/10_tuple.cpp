@@ -112,7 +112,9 @@ TEST_CASE("Boost.Fusion struct adaptation", "[tmp]")
 //      https://wandbox.org/permlink/b3ecHk9j2u5ueDo4
 
 template <class T, class... TArgs>
-decltype(void(T{std::declval<TArgs>()...}), std::true_type{})
+decltype(
+    void(T{std::declval<TArgs>()...}), std::true_type{}
+)
 test_is_braces_constructible(int);
 
 template <class, class...>
