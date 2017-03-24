@@ -23,6 +23,8 @@
     + std::decay
     + std::enable_if
     + std::declval
+    + std::result_of
+        - cf.> C++17 `std::is_invocable`, `std::invoke_result`, `std::invoke`
 * SFINAE
 * tag dispatch pattern
 * C++17 constexpr if
