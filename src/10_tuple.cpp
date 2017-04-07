@@ -60,7 +60,7 @@ TEST_CASE("tuple-like types in C++", "[tmp]")
     REQUIRE(std::get<0>(arr) == 1);
     REQUIRE(std::get<4>(arr) == 5);
 
-    // any types supports std::tuple_size, std::get, ...
+    // any types support std::tuple_size, std::get, ...
 }
 
 
