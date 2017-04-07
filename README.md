@@ -70,11 +70,13 @@
 16. unique
 17. ...
 
+Codes and examples of these metafunctions are available at <https://github.com/ghjang/skull>.
+
 ## Examples
 
 1. Member Test
 2. Integer Sequence Generation
-3. make_variant_vector function template
+3. make_variant_array function template
 4. Implementing tuple
 5. Implementing Generic Abstract Factory
 6. Aligned Tuple
