@@ -49,3 +49,25 @@
         - any types support `std::tuple_size`, `std::get`, ...
         - cf.> Boost.Fusion struct adaptation, C++17 Structured Bindings
     + C++17 `std::apply`
+
+# 2017/04/07
+
+* metafunction class concept & examples
+    + metafunction to metafunction class
+        - `quote`
+    + metafunction class invocation utility
+        - `invoke`
+* metafunctions similar to Haskell's default module, Prelude
+    + base
+        - `append`
+        - `at`
+        - metafunction class template argument binding
+            - `bind_first`
+            - `bind_last`
+        - metafunction class composition
+            - `compose`
+        - `identity`, `type_is`
+        - `is_same_template`
+        - `prepend`
+        - `rename_template`
+        - `type_list`, `TL`
