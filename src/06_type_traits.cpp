@@ -317,18 +317,9 @@ TEST_CASE("std::result_of, std::invoke_result", "[tmp]")
 // C++17 std::is_invocable
 TEST_CASE("std::is_invocable, std::is_invocable_r", "[tmp]")
 {
-    // NOTE: There is no std::is_invocable_v in LLVM 4.0.0.
-    /*
     static_assert(std::is_invocable_v<callable, int, int>);
     static_assert(std::is_invocable_v<callable, double, double>);
-    */
-
-    // NOTE: std::is_callable is not found on http://cppreference.com at the moment.
-    //          What's wrong??
     
-    static_assert(std::is_callable_v<callable(int, int)>);
-    static_assert(std::is_callable_v<callable(double, double)>);
-
     struct S
     {
         S(int i);
@@ -352,29 +343,26 @@ TEST_CASE("std::is_invocable, std::is_invocable_r", "[tmp]")
     static_assert(!std::is_convertible_v<S, T>);
     static_assert(!std::is_convertible_v<T, S>);
 
-    static_assert(std::is_callable_v<callable(int, int), int>);
-    static_assert(std::is_callable_v<callable(int, int), double>);
-    static_assert(std::is_callable_v<callable(double, double), int>);
-    static_assert(std::is_callable_v<callable(double, double), double>);
+    static_assert(std::is_invocable_r_v<int, callable, int, int>);
+    static_assert(std::is_invocable_r_v<double, callable, int, int>);
+    static_assert(std::is_invocable_r_v<int, callable, double, double>);
+    static_assert(std::is_invocable_r_v<double, callable, double, double>);
 
-    static_assert(std::is_callable_v<callable(int, int), S>);
-    static_assert(std::is_callable_v<callable(double, double), S>);
-    static_assert(!std::is_callable_v<callable(int, int), T>);
-    static_assert(!std::is_callable_v<callable(double, double), T>);
+    static_assert(std::is_invocable_r_v<S, callable, int, int>);
+    static_assert(std::is_invocable_r_v<S, callable, double, double>);
+    static_assert(!std::is_invocable_r_v<T, callable, int, int>);
+    static_assert(!std::is_invocable_r_v<T, callable, double, double>);
 }
 
 // C++17 std::invoke_result
 TEST_CASE("std::invoke_result", "[tmp]")
 {
-    // NOTE: There is no std::invoke_result in LLVM 4.0.0.
-    /*
     static_assert(
         std::is_same_v<
                 double,
                 std::invoke_result_t<callable, int, int>
         >
     );
-    */
 }
 
 static auto my_local_func(int i)
