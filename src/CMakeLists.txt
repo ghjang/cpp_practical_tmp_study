@@ -16,8 +16,6 @@ else()
     message(FATAL_ERROR "Could not find boost!")
 endif()
 
-set(CMAKE_C_COMPILER  "/Users/gilhojang/clang/clang+llvm-4.0.0-x86_64-apple-darwin/bin/clang")
-set(CMAKE_CXX_COMPILER  "/Users/gilhojang/clang/clang+llvm-4.0.0-x86_64-apple-darwin/bin/clang++")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 
 set(SOURCE_FILES
