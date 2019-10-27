@@ -21,7 +21,10 @@ void fvp(T &... t)
     };
 
     // NOTE: This is NOT allowed.
-    //auto & [t...] = S{};
+    //auto [t...] = S{};
+
+    // FYI, there seemed to be a proposal like the following:
+    //  http://open-std.org/JTC1/SC22/WG21/docs/papers/2018/p1061r0.html?fbclid=IwAR3CL-9DVXdYc8rYhVrwRKDQJDzRcI5u8r07eWwlaF__rENLn5-G_LqAGCg
 }
 
 TEST_CASE("structured bindings with variadic template parameters", "[tmp]")
