@@ -29,6 +29,7 @@ set(SOURCE_FILES
         10_tuple.cpp
         11_make_pair_array.cpp
         12_n-depth_loop.cpp
-        13_metafunction_class.cpp)
+        13_metafunction_class.cpp
+        14_structured_bindings.cpp)
 
 add_executable(cpp_tmp_test ${SOURCE_FILES})
